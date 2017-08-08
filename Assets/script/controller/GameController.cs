@@ -1,19 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class GameController : MonoBehaviour {
+
+    // public static int[][] qipan = { }
 
     //当前选中棋子的控制器
     public ChessPieceController pickCpc;
 
     public List<GameObject> sits;
+    //红方卡片
+    public List<Card> teamHong=new List<Card>();
+    //黑方卡片
+    public List<Card> teamHei = new List<Card>();
 
     public TeamID currentTeamId = TeamID.HONG;
 
+    void Init() {
+        ChessPiece chessPiece = new ChessPiece(TeamID.HONG,ChessPieceType.BING,0,6);
+        Card temCard = new Card(chessPiece, "dunpaiBg", "180008");
+        teamHong.Add(temCard);
+        foreach (Card card in teamHong) {
+            ChessPieceType c = card.chessPiece.chessPieceType;
+            string name = c.ToString();
+            GameObject sitObj = GameObject.Find(card.chessPiece.SitName());
+            GameObject gameObj = Resources.Load("prefabs/cardPfb/" + name) as GameObject;
+            gameObj.transform.position = sitObj.transform.position;
+            Material material = Resources.Load("wujiang/Materials/" + card.bgMaterials) as Material;
+            Sprite sprite = Resources.Load("wujiang/" + card.spriteMaterials) as Sprite;
+            MeshRenderer meshRenderer=gameObj.GetComponent<MeshRenderer>();
+            meshRenderer.materials[0] = material;
+            foreach (SpriteRenderer spriteRenderer in gameObj.GetComponentsInChildren<SpriteRenderer>()) {
+                spriteRenderer.sprite = sprite;
+                break;
+            }
+        }
+    }
 
     // Use this for initialization
     void Start() {
+        //Init();
         //Debug.Log("为座位增加脚本...");
         ////为每个座位对象添加脚本组件
         //GameObject[] objs=GameObject.FindGameObjectsWithTag("Sit");

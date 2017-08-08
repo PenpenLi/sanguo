@@ -103,7 +103,7 @@ public class PaoController : ChessPieceController {
     }
 
     // Update is called once per frame
-    void Update () {
-	
-	}
+     void Update() {
+        base.Update();
+    }
 }

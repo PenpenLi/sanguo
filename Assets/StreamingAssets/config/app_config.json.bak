@@ -1,0 +1,7 @@
+{
+	"debug":true,
+	"appID":1,
+	"channelID":1,
+	"asdkUrl":"http://localhost:9527/asdk",
+	"centerUrl":"http://localhost:8081"
+}

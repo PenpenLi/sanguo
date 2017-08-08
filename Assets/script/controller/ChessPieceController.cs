@@ -13,6 +13,11 @@ public abstract class ChessPieceController : MonoBehaviour {
 
     //该棋子所属的位置
     public SitController sitController;
+    //该棋子的角色
+    public Transform sprite;
+    //技能显示面板
+    public SkillCanvasController skillCanvasController;
+    private int frameNum;
 
     public virtual void Start() {
         //获取到自己的坐标位置
@@ -23,9 +28,36 @@ public abstract class ChessPieceController : MonoBehaviour {
         string name = x + "" + z;
         //根据座位获取到自己的位置
         GameObject go = GameObject.Find(name);
+        transform.position = go.transform.position;
         Debug.Log(name + "," + go.name);
         sitController = go.GetComponent<SitController>();
         sitController.chessPieceObj = this.gameObject;
+        foreach (Transform tf in GetComponentsInChildren<Transform>()) {
+            if (tf.name.Equals("sprite")) {
+                sprite = tf;
+                break;
+            }
+        }
+
+        skillCanvasController = GameObject.Find("skillCanvas").GetComponent<SkillCanvasController>();
+        System.Random r = new System.Random();
+        frameNum = x+z;
+        //Debug.Log("shui ji shu:" +frameNum);
+    }
+
+    public void Update() {
+        if (sprite != null) {
+            frameNum++;
+            int a = frameNum / 50;
+            int b = frameNum % 50;
+            if (b == 0) {
+                if (a % 2 == 0) {
+                    sprite.Translate(new Vector3(0, 0, 0.1f));
+                } else {
+                    sprite.Translate(new Vector3(0, 0, -0.1f));
+                }
+            }
+        }
     }
     //private void OnMouseDown() {
     //    if (!isPick) {
@@ -38,6 +70,9 @@ public abstract class ChessPieceController : MonoBehaviour {
     public void pick() {
         //if (!isPick) {
         this.gameObject.transform.position += new Vector3(0, 3, 0);
+        SpriteRenderer sr = sprite.GetComponent<SpriteRenderer>();
+        skillCanvasController.Reset(sr.sprite).Show();
+
         //isPick = true;
         //}
     }

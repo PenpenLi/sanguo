@@ -72,8 +72,7 @@ public class CheController : ChessPieceController {
         base.Start();
     }
 
-    // Update is called once per frame
-    void Update() {
-
+    public void Update() {
+        base.Update();
     }
 }
