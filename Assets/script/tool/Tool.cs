@@ -184,7 +184,7 @@ namespace Assets.Scripts.tool
         /// </summary>
         /// <param name="sceneName"></param>
         /// <returns></returns>
-        public static IEnumerator loadScene(string sceneName)
+        public static IEnumerator LoadScene(string sceneName)
         {
             if (!isLoading)
             {
@@ -208,7 +208,7 @@ namespace Assets.Scripts.tool
             }
             
         }
-        public static long toGMTTime(DateTime time)
+        public static long ToGMTTime(DateTime time)
         {
             System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
             return (long)(time - startTime).TotalMilliseconds; // 相差毫秒数

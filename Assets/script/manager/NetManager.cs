@@ -146,7 +146,7 @@ namespace Assets.Scripts.manager
 
             ReqPingMessage reqPing = new ReqPingMessage();
            // Debug.Log(ts.TotalSeconds);
-            reqPing.time = (ulong)(Tool.toGMTTime(DateTime.Now)+serverTimeOffset);
+            reqPing.time = (ulong)(Tool.ToGMTTime(DateTime.Now)+serverTimeOffset);
             NetManager.clientSocket.WriteSend(reqPing);
         }
 

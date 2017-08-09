@@ -12,14 +12,14 @@ public class GameController : MonoBehaviour {
 
     public List<GameObject> sits;
     //红方卡片
-    public List<Card> teamHong=new List<Card>();
+    public List<Card> teamHong = new List<Card>();
     //黑方卡片
     public List<Card> teamHei = new List<Card>();
 
     public TeamID currentTeamId = TeamID.HONG;
 
     void Init() {
-        ChessPiece chessPiece = new ChessPiece(TeamID.HONG,ChessPieceType.BING,0,6);
+        ChessPiece chessPiece = new ChessPiece(TeamID.HONG, ChessPieceType.BING, 0, 6);
         Card temCard = new Card(chessPiece, "dunpaiBg", "180008");
         teamHong.Add(temCard);
         foreach (Card card in teamHong) {
@@ -27,10 +27,12 @@ public class GameController : MonoBehaviour {
             string name = c.ToString();
             GameObject sitObj = GameObject.Find(card.chessPiece.SitName());
             GameObject gameObj = Resources.Load("prefabs/cardPfb/" + name) as GameObject;
+            gameObj = Instantiate(gameObj);
             gameObj.transform.position = sitObj.transform.position;
             Material material = Resources.Load("wujiang/Materials/" + card.bgMaterials) as Material;
-            Sprite sprite = Resources.Load("wujiang/" + card.spriteMaterials) as Sprite;
-            MeshRenderer meshRenderer=gameObj.GetComponent<MeshRenderer>();
+            Texture2D texture = Resources.Load("wujiang/" + card.spriteMaterials) as Texture2D;
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            MeshRenderer meshRenderer = gameObj.GetComponent<MeshRenderer>();
             meshRenderer.materials[0] = material;
             foreach (SpriteRenderer spriteRenderer in gameObj.GetComponentsInChildren<SpriteRenderer>()) {
                 spriteRenderer.sprite = sprite;
@@ -98,8 +100,8 @@ public class GameController : MonoBehaviour {
     private void pick(ChessPieceController cpc) {
         //选中棋子
         pickCpc = cpc;
-        cpc.pick();
-        sits = cpc.getCanMove();
+        cpc.Pick();
+        sits = cpc.GetCanMove();
         sits.ForEach(obj => {
             obj.GetComponent<MeshRenderer>().enabled = true;
         });
@@ -116,7 +118,7 @@ public class GameController : MonoBehaviour {
             //把该位置原来的棋子注销
             Destroy(sitc.chessPieceObj);
         }
-        pickCpc.moveTo(sit);
+        pickCpc.MoveTo(sit);
         sitc.chessPieceObj = pickCpc.gameObject;
         clearState();
     }
@@ -125,7 +127,7 @@ public class GameController : MonoBehaviour {
         sits.ForEach(obj => {
             obj.GetComponent<MeshRenderer>().enabled = false;
         });
-        pickCpc.unpick();
+        pickCpc.Unpick();
         pickCpc = null;
         sits = null;
     }

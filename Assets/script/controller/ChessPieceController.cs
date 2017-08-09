@@ -67,7 +67,7 @@ public abstract class ChessPieceController : MonoBehaviour {
     //    }
     //}
 
-    public void pick() {
+    public void Pick() {
         //if (!isPick) {
         this.gameObject.transform.position += new Vector3(0, 3, 0);
         SpriteRenderer sr = sprite.GetComponent<SpriteRenderer>();
@@ -76,16 +76,16 @@ public abstract class ChessPieceController : MonoBehaviour {
         //isPick = true;
         //}
     }
-    public void unpick() {
+    public void Unpick() {
         //if (isPick) {
         this.gameObject.transform.position -= new Vector3(0, 3, 0);
         // isPick = false;
         // }
     }
 
-    public abstract List<GameObject> getCanMove();
+    public abstract List<GameObject> GetCanMove();
 
-    public bool moveTo(GameObject gameObject) {
+    public bool MoveTo(GameObject gameObject) {
         //List<GameObject> canMoves = getCanMove();
         //如果可以行走
         //if (canMoves.Contains(gameObject)) {

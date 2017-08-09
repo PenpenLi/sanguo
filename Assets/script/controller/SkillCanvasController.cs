@@ -9,8 +9,9 @@ public class SkillCanvasController : MonoBehaviour {
     public Button cardName;
     public Text skillName;
     public Text skillDesc;
-    public int showSecond = 2;
-    private DateTime beginTime;
+    public int showSecond = 1;
+    private int beginTime;
+    private int countDown;
 
     private Canvas canvas;
 
@@ -22,9 +23,8 @@ public class SkillCanvasController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (canvas.enabled) {
-            DateTime currentTime = System.DateTime.Now;
-            int diff = currentTime.Second - beginTime.Second;
-            if (diff > showSecond) {
+            //int diff = TimeUtils.CurrentGMTSeconds() - beginTime;
+            if (countDown-- < 0) {
                 canvas.enabled = false;
             }
         }
@@ -38,6 +38,7 @@ public class SkillCanvasController : MonoBehaviour {
 
     public void Show() {
         canvas.enabled = true;
-        beginTime = System.DateTime.Now;
+        countDown = 50;
+        //beginTime = TimeUtils.CurrentGMTSeconds();
     }
 }

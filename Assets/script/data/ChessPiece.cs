@@ -7,7 +7,7 @@ using System.Text;
 public enum TeamID { HONG, HEI }
 [System.Serializable]
 public enum ChessPieceType {
-    SHUAI, SHI, XIANG, MA, CHE, PAO, BING
+    SHUAI, SHI, XIANG, MA , CHE , PAO , BING 
 }
 
 [System.Serializable]

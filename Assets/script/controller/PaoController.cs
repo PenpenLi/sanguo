@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 public class PaoController : ChessPieceController {
-    public override List<GameObject> getCanMove() {
+    public override List<GameObject> GetCanMove() {
         List<GameObject> result = new List<GameObject>();
         int x = chessPiece.x;
         int z = chessPiece.z;

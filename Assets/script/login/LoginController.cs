@@ -262,7 +262,7 @@ public class LoginController : MonoBehaviour {
             FileTool.WriteFileSingle(Application.persistentDataPath, FileTool.WRITE_READ_CONFIG_NAME, dataArr);
 
             //  SceneManager.LoadScene("Main");
-            StartCoroutine(Tool.loadScene("Main"));
+            StartCoroutine(Tool.LoadScene("Main"));
             //  PopupManager.addWindow(PopupWindowName.WAITING_NET);
         }
     }

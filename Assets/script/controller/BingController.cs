@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 public class BingController : ChessPieceController {
-    public override List<GameObject> getCanMove() {
+    public override List<GameObject> GetCanMove() {
         List<GameObject> result = new List<GameObject>();
         int x = chessPiece.x;
         int z = chessPiece.z;
@@ -14,7 +14,7 @@ public class BingController : ChessPieceController {
         } else if (chessPiece.teamId == TeamID.HEI && z != 9) {//黑兵
             result.Add(GameObject.Find("" + x + (z + 1)));
         }
-        if (isCross()) {
+        if (IsCross()) {
             //如果不在最右侧
             if (x != 8) {
                 //红兵向右行
@@ -41,7 +41,7 @@ public class BingController : ChessPieceController {
     }
 
     //是否已经过河
-    public bool isCross() {
+    public bool IsCross() {
         if (chessPiece.teamId == TeamID.HONG && chessPiece.z < 5) {
             return true;
         }
