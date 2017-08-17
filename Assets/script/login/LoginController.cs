@@ -250,7 +250,7 @@ public class LoginController : MonoBehaviour {
 
     private bool isLogin = false;
     private void Update() {
-        if (!isLogin && NetManager.clientSocket != null && NetManager.clientSocket.mySocket.Connected) {
+        if (!isLogin && NetManager.clientSocket != null && NetManager.clientSocket.socket.Connected) {
             isLogin = true;
             LoginGame();
         }
@@ -276,6 +276,6 @@ public class LoginController : MonoBehaviour {
     }
     private void OnApplicationQuit() {
         Debug.Log("login OnApplicationQuit");
-        NetManager.getIntance().stopNet();
+        NetManager.GetIntance().StopNet();
     }
 }

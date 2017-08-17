@@ -4,6 +4,7 @@ using System.Collections;
 /// <summary>
 /// 卡片数据结构
 /// </summary>
+[RequestMessage(messageType = 1, cmd = 2)]
 public class Card {
     public string name;
     //卡片类型

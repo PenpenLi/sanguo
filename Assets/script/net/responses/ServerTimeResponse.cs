@@ -24,12 +24,12 @@ namespace Assets.Scripts.net.responses
             {
                 result = NetManager.DeSerialize<ResServerTime>(tmeg.data_message);
                 
-                TimeSpan timeSpan = DateTime.Now - NetManager.getIntance().beginTime;
+                TimeSpan timeSpan = DateTime.Now - NetManager.GetIntance().beginTime;
                 long ping = (long)timeSpan.TotalMilliseconds / 2;
                 long serverTime = (long)result.time + ping;
                 long serverTimeOffset = serverTime - Tool.ToGMTTime(DateTime.Now);
-                NetManager.getIntance().serverTimeOffset = serverTimeOffset;
-                NetManager.getIntance().startPing();
+                NetManager.GetIntance().serverTimeOffset = serverTimeOffset;
+                NetManager.GetIntance().StartPing();
                 Debug.Log("ping:" + ping + ",serverTimeOffset:" + serverTimeOffset);
             }
 
