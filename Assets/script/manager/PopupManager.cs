@@ -6,18 +6,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.manager {
     class PopupManager : MonoBehaviour {
-        static private PopupManager _instance;
-        static public PopupManager GetInstance() {
-            if (_instance == null) {
-                _instance = new PopupManager();
-            }
-            return _instance;
-        }
 
-        static public PopupManager instance;
         private static Dictionary<string, GameObject> dicPopup = new Dictionary<string, GameObject>();
-
-
         public static void ShowClosePopUp(string message) {
             GameObject gameObject = AddWindow(PopupWindowName.CLOSE_POP_UP);
             ClosePopPanelController controller = gameObject.GetComponent<ClosePopPanelController>();

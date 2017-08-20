@@ -40,7 +40,7 @@ public abstract class ChessPieceController : MonoBehaviour {
         }
 
         skillCanvasController = GameObject.Find("skillCanvas").GetComponent<SkillCanvasController>();
-        System.Random r = new System.Random();
+        //System.Random r = new System.Random();
         frameNum = x+z;
         //Debug.Log("shui ji shu:" +frameNum);
     }

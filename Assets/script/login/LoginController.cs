@@ -2,8 +2,8 @@
 using Assets.Scripts.manager;
 using Assets.Scripts.net;
 using Assets.Scripts.tool;
-using com.tsixi.miner.pbm;
 using org.alan;
+using org.alan.chess.proto;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LoginController : MonoBehaviour {
+public class LoginController : MonoBehaviour, IResponseHandler {
 
 
     public AppConfig appConfig;
@@ -28,7 +28,8 @@ public class LoginController : MonoBehaviour {
     public Button findPwdBut;
     public Button guestBut;
     public Toggle rememberMeTog;
-
+    string _userName;
+    string _password;
 
     private void Start() {
         appConfig = ApplicationManager.appConfig;
@@ -44,15 +45,26 @@ public class LoginController : MonoBehaviour {
         userNameInput.text = userMeta.userName;
         passwordInput.text = userMeta.password;
 
+        //注册登录消息处理
+        MessageDispatcher.RegisterHandler(MessageTypeEnum.LOGIN, this);
+    }
+
+
+    private void Update() {
+    }
+
+    private void OnDestroy() {
+        //注册登录消息处理
+        MessageDispatcher.RemoveHandler(MessageTypeEnum.LOGIN);
     }
 
     /// <summary>
     /// 登录处理
     /// </summary>
     private void LoginHandler() {
-        string userName = userNameInput.text;
-        string password = passwordInput.text;
-        Login(userName, password);
+        _userName = userNameInput.text.Trim();
+        _password = passwordInput.text.Trim();
+        Login(_userName, _password);
     }
 
     /// <summary>
@@ -239,43 +251,56 @@ public class LoginController : MonoBehaviour {
             PopupManager.ShowClosePopUp(result);
             return;
         }
-        PlayerManager.getInstance().LoginDataCenter = JsonUtility.FromJson<LoginDataCenter>(result);
-        if (PlayerManager.getInstance().LoginDataCenter.code == 0) {
-            NetManager.clientSocket = new ClientSocket(PlayerManager.getInstance().LoginDataCenter.data.logicServer.host, PlayerManager.getInstance().LoginDataCenter.data.logicServer.port);
-        } else {
-            PopupManager.ShowClosePopUp(PlayerManager.getInstance().LoginDataCenter.dec);
+        PlayerManager.self.loginDataCenter = JsonUtility.FromJson<LoginDataCenter>(result);
+        if (PlayerManager.self.loginDataCenter.code != 0) {
+            PopupManager.ShowClosePopUp(PlayerManager.self.loginDataCenter.dec);
             return;
-        }
-    }
-
-    private bool isLogin = false;
-    private void Update() {
-        if (!isLogin && NetManager.clientSocket != null && NetManager.clientSocket.socket.Connected) {
-            isLogin = true;
+        } else {
             LoginGame();
         }
-        if (PlayerManager.getInstance().LoginResult != null && PlayerManager.getInstance().LoginResult.login_result != Result.FAILURE && !isLoad) {
-            isLoad = true;
-            ArrayList dataArr = new ArrayList();
-            dataArr.Add(FileTool.USERNAME + ":" + userNameInput.text);
-            dataArr.Add(FileTool.PASSWORD + ":" + passwordInput.text);
-            FileTool.WriteFileSingle(Application.persistentDataPath, FileTool.WRITE_READ_CONFIG_NAME, dataArr);
+    }
 
-            //  SceneManager.LoadScene("Main");
-            StartCoroutine(Tool.LoadScene("Main"));
-            //  PopupManager.addWindow(PopupWindowName.WAITING_NET);
-        }
-    }
     private void LoginGame() {
-        ReqLoginMessage reqLogin = new ReqLoginMessage() {
-            token = PlayerManager.getInstance().LoginDataCenter.data.token,
-            user_id = PlayerManager.getInstance().LoginDataCenter.data.accountId
-        };
-        NetManager.clientSocket.WriteSend(reqLogin);
-        SceneManager.LoadScene("scene/main");
+        NetManager.LoginGameServer();
+        //StartCoroutine(Tool.LoadScene("scene/main"));
     }
+
+    private void LoginSuccess(EnterGame enterGame) {
+        PopupManager.ShowTimerPopUp(GameTips.GetTips(GameResultEnum.LOGIN_SUCCESS));
+        isLoad = true;
+        SaveUser();
+        StartCoroutine(Tool.LoadScene("scene/main"));
+    }
+
+    private void CreateRole() {
+
+    }
+
+    private void SaveUser() {
+        UserMeta userMeta = new UserMeta {
+            userName = _userName,
+            password = _password
+        };
+        ApplicationManager.SaveUserInfo(userMeta);
+    }
+
     private void OnApplicationQuit() {
         Debug.Log("login OnApplicationQuit");
-        NetManager.GetIntance().StopNet();
+        NetManager.clientSocket.Close();
+    }
+
+    public void Handle(int cmd, byte[] data) {
+        switch (cmd) {
+            case MessageCmdEnum.LOGIN_RESP_CREATE_ROLE:
+                //CreateRole createRole = ProtobufTool.DeSerialize<CreateRole>(data);
+                CreateRole();
+                break;
+            case MessageCmdEnum.LOGIN_RESP_ENTER_GAME:
+                EnterGame enterGame = ProtobufTool.DeSerialize<EnterGame>(data);
+                LoginSuccess(enterGame);
+                break;
+            default:
+                break;
+        }
     }
 }

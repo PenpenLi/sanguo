@@ -1,36 +1,29 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Assets.Scripts.net;
 using System.Collections.Generic;
-using Assets.Scripts.net.responses;
-using System;
 
-public struct MessageType {
-    public int messageType;
-    public int cmd;
+public static class MessageDispatcher {
+    private static Dictionary<int, IResponseHandler> responseDic = new Dictionary<int, IResponseHandler>();
 
-    public MessageType(int messageType, int cmd) {
-        this.messageType = messageType;
-        this.cmd = cmd;
-    }
-}
-
-public class MessageDispatcher {
-    public Dictionary<uint, IResponse> ResponseDic = new Dictionary<uint, IResponse>();
-
-    public Dictionary<Type, MessageType> RequestTypeDic = new Dictionary<Type, MessageType>();
-
-    public void Receive(MarsMessage marsMsg) {
-
+    public static void RegisterHandler(int messageType, IResponseHandler responseHandler) {
+        responseDic[messageType] = responseHandler;
     }
 
-    public MarsMessage GetMessage(object msg) {
-        MessageType mt = RequestTypeDic[msg.GetType()];
-        MarsMessage marsMessage = new MarsMessage() {
-            messageType = mt.messageType,
-            cmd = mt.cmd,
-            data = ProtobufTool.Serialize(msg)
-        };
-        return marsMessage;
+    public static void RemoveHandler(int messageType) {
+        responseDic.Remove(messageType);
     }
-
+    public static void RemoveHandler(IResponseHandler responseHandler) {
+        foreach (var value in responseDic) {
+            if (value.Value == responseHandler) {
+                responseDic.Remove(value.Key);
+            }
+        }
+    }
+    public static void Receive(MarsMessage marsMsg) {
+        int messageType = marsMsg.messageType;
+        int cmd = marsMsg.cmd;
+        IResponseHandler handler = responseDic[messageType];
+        if (handler != null) {
+            handler.Handle(cmd, marsMsg.data);
+        }
+    }
 }

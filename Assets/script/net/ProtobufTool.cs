@@ -58,4 +58,28 @@ public class ProtobufTool {
         }
     }
 
+    /// <summary>
+    /// 将收到的消息反序列化成对象
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="msg"></param>
+    /// <returns></returns>
+    static public T DeSerialize<T>(byte[] msg, Type type) {
+        T result;
+        try {
+            using (MemoryStream ms = new MemoryStream()) {
+                //将消息写入流中
+                ms.Write(msg, 0, msg.Length);
+                //将流的位置归0
+                ms.Position = 0;
+                //使用工具反序列化对象
+                result = (T)ProtoBuf.Serializer.Deserialize(type, ms);
+                ms.Dispose();
+                return result;
+            }
+        } catch (Exception ex) {
+            Debug.Log("反序列化失败: " + ex.ToString());
+            return default(T);
+        }
+    }
 }

@@ -9,6 +9,8 @@ namespace org.alan {
     public static class ApplicationManager {
         public const string appConfigFile = "/config/app_config.json";
         public const string userMetaFile = "/meta/user.json";
+
+        public static string path = Application.streamingAssetsPath;
         //应用程序配置文件
         public static AppConfig appConfig;
         //用户信息数据
@@ -16,7 +18,6 @@ namespace org.alan {
 
         //在静态构造函数中初始化
         static ApplicationManager() {
-            string path = Application.streamingAssetsPath;
             Debug.Log(path);
             string context = File.ReadAllText(path + appConfigFile);
             //读取应用配置
@@ -34,6 +35,13 @@ namespace org.alan {
                 userMeta = new UserMeta();
             }
 
+        }
+
+        public static void SaveUserInfo(UserMeta _userMeta) {
+            userMeta = _userMeta;
+            string contents = JsonUtility.ToJson(userMeta);
+            string file = path + userMetaFile;
+            File.WriteAllText(file, contents);
         }
 
 
