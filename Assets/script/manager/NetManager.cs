@@ -9,9 +9,11 @@ class NetManager {
     static public ClientSocket clientSocket;
 
     public static void CreateScoket() {
-        string host = PlayerManager.self.loginDataCenter.data.logicServer.host;
-        int port = PlayerManager.self.loginDataCenter.data.logicServer.port;
-        NetManager.clientSocket = new ClientSocket(host, port);
+        if (clientSocket == null || !clientSocket.socket.Connected) {
+            string host = PlayerManager.self.loginDataCenter.data.logicServer.host;
+            int port = PlayerManager.self.loginDataCenter.data.logicServer.port;
+            NetManager.clientSocket = new ClientSocket(host, port);
+        }
     }
 
     static public void LoginGameServer() {

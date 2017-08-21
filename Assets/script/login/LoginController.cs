@@ -266,7 +266,7 @@ public class LoginController : MonoBehaviour, IResponseHandler {
     }
 
     private void LoginSuccess(EnterGame enterGame) {
-        PopupManager.ShowTimerPopUp(GameTips.GetTips(GameResultEnum.LOGIN_SUCCESS));
+        PopupManager.ShowTimerPopUp(GameTipsDic.GetTips(GameResultEnum.LOGIN_SUCCESS));
         isLoad = true;
         SaveUser();
         StartCoroutine(Tool.LoadScene("scene/main"));

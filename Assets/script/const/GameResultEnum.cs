@@ -6,10 +6,10 @@ using System.Collections.Generic;
 /// <summary>
 /// 游戏通用返回值的一个描述映射
 /// </summary>
-public static class GameTips {
+public static class GameTipsDic {
     private static Dictionary<GameResultEnum, string> resultDes = new Dictionary<GameResultEnum, string>();
 
-    static GameTips() {
+    static GameTipsDic() {
         resultDes[GameResultEnum.SUCCESS] = "成功";
         resultDes[GameResultEnum.FAILURE] = "失败";
         resultDes[GameResultEnum.ILLEGAL] = "非法操作";
@@ -26,7 +26,10 @@ public static class GameTips {
     }
 
     public static string GetTips(GameResultEnum gre) {
-        return resultDes[gre];
+        if (resultDes.ContainsKey(gre)) {
+            return resultDes[gre];
+        }
+        return null;
     }
 }
 

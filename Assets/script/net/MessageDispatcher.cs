@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.net;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class MessageDispatcher {
     private static Dictionary<int, IResponseHandler> responseDic = new Dictionary<int, IResponseHandler>();
@@ -21,6 +22,7 @@ public static class MessageDispatcher {
     public static void Receive(MarsMessage marsMsg) {
         int messageType = marsMsg.messageType;
         int cmd = marsMsg.cmd;
+        Debug.LogFormat("收到服务器消息，messageType={0},cmd={1}", messageType, cmd);
         IResponseHandler handler = responseDic[messageType];
         if (handler != null) {
             handler.Handle(cmd, marsMsg.data);

@@ -14,9 +14,6 @@ namespace Assets.Scripts.net {
         private const int pingInterval = 30 * 1000;
         public Socket socket;
         public byte[] head = new byte[headlen];
-        //发送数据池
-        private Queue<byte[]> sendCache = new Queue<byte[]>();
-        private bool isSending;
 
         private System.Timers.Timer timer;
 
@@ -63,7 +60,7 @@ namespace Assets.Scripts.net {
                     //处理一下高低字节位问题
                     byte[] realBytesLen = new byte[headlen];
                     for (int i = 0; i < headlen; i++) {
-                        realBytesLen[i] = head[headlen - i];
+                        realBytesLen[i] = head[headlen - 1 - i];
                     }
                     int length = ByteUtil.byteArray2Int(realBytesLen, 0);
                     byte[] data = new byte[length];//声明接受数组
@@ -98,13 +95,15 @@ namespace Assets.Scripts.net {
             byte[] msBts = ProtobufTool.Serialize(marsMessage);
             byte[] data = new byte[msBts.Length + 4];
             byte[] lenghtBytes = ByteUtil.int2ByteArray(msBts.Length);
-            if (marsMessage.messageType != 1)//!ping
-                Debug.Log("开始发送msBts.Length" + msBts.Length + "..." + marsMessage.messageType + ":" + marsMessage.cmd);
             for (int i = 0; i < 4; i++) {
                 data[i] = lenghtBytes[3 - i];
             }
             for (int i = 0; i < msBts.Length; i++) {
                 data[i + 4] = msBts[i];
+            }
+            //!ping
+            if (marsMessage.messageType != 1) {
+                Debug.LogFormat("发送数据,messageType={0},cmd={1},messageLen={2}", marsMessage.messageType, marsMessage.cmd, data.Length);
             }
             socket.BeginSend(data, 0, data.Length, SocketFlags.None, callback => {
                 socket.EndSend(callback);
@@ -154,6 +153,7 @@ namespace Assets.Scripts.net {
             long currentTime = Tool.ToGMTTime(DateTime.Now);
             ping = (int)(currentTime - lastPingTime) / 2;
             serverTimeOffset = ping + (pong.time - lastPingTime);
+            Debug.Log("ping:" + ping + ",serverTimeOffset=" + serverTimeOffset);
         }
 
         /// <summary>
