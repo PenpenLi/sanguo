@@ -31,11 +31,13 @@ public class LoginController : MonoBehaviour, IResponseHandler {
     string _userName;
     string _password;
 
+    LoginHandler loginHandler;
+
     private void Start() {
         appConfig = ApplicationManager.appConfig;
         userMeta = ApplicationManager.userMeta;
         //登录按钮增加事件
-        loginBut.onClick.AddListener(LoginHandler);
+        loginBut.onClick.AddListener(LoginHandle);
         //增加注册按钮事件
         registerBut.onClick.AddListener(RegisterHandler);
         //试玩按钮事件,游客登录
@@ -46,11 +48,13 @@ public class LoginController : MonoBehaviour, IResponseHandler {
         passwordInput.text = userMeta.password;
 
         //注册登录消息处理
-        MessageDispatcher.RegisterHandler(MessageTypeEnum.LOGIN, this);
+        loginHandler = new LoginHandler();
+        MessageDispatcher.RegisterHandler(MessageTypeEnum.LOGIN, loginHandler);
     }
 
 
     private void Update() {
+        loginHandler.Update();
     }
 
     private void OnDestroy() {
@@ -61,7 +65,7 @@ public class LoginController : MonoBehaviour, IResponseHandler {
     /// <summary>
     /// 登录处理
     /// </summary>
-    private void LoginHandler() {
+    private void LoginHandle() {
         _userName = userNameInput.text.Trim();
         _password = passwordInput.text.Trim();
         Login(_userName, _password);
@@ -262,6 +266,8 @@ public class LoginController : MonoBehaviour, IResponseHandler {
 
     private void LoginGame() {
         NetManager.LoginGameServer();
+        PlayerPrefs.SetString("userName", _userName);
+        PlayerPrefs.SetString("password", _password);
         //StartCoroutine(Tool.LoadScene("scene/main"));
     }
 

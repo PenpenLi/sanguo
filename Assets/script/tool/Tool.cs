@@ -153,6 +153,7 @@ namespace Assets.Scripts.tool {
         /// <param name="sceneName"></param>
         /// <returns></returns>
         public static IEnumerator LoadScene(string sceneName) {
+            Debug.LogFormat("开始加载场景,scene name is {0}", sceneName);
             if (!isLoading) {
                 isLoading = true;
                 GameObject go = PopupManager.AddWindow(PopupWindowName.LOADING_PANEL);

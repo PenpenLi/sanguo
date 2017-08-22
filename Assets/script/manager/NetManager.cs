@@ -30,5 +30,22 @@ class NetManager {
         };
         clientSocket.Send(marsMessage);
     }
+    static public void SendCreateRole(string roleName) {
+        VertifyUserInfo _vertifyUserInfo = new VertifyUserInfo() {
+            token = PlayerManager.self.loginDataCenter.data.token,
+            userId = (long)PlayerManager.self.loginDataCenter.data.accountId,
+            zoneId = 1
+        };
+        ReqCreateRole reqCreateRole = new ReqCreateRole() {
+            vertifyUserInfo = _vertifyUserInfo,
+            name = roleName
+        };
+        MarsMessage marsMessage = new MarsMessage() {
+            messageType = MessageTypeEnum.LOGIN,
+            cmd = MessageCmdEnum.LOGIN_REQ_CREATE_ROLE,
+            data = ProtobufTool.Serialize(reqCreateRole)
+        };
+        clientSocket.Send(marsMessage);
+    }
 }
 
