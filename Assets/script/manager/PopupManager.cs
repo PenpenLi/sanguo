@@ -73,6 +73,10 @@ namespace Assets.Scripts.manager {
 
     class PopupWindowName {
         /// <summary>
+        /// 匹配框
+        /// </summary>
+        static public string MATCH_POP_UP = "SceneUI/matchPanel";
+        /// <summary>
         /// 定时关闭弹出框
         /// </summary>
         static public string TIME_POP_UP = "SceneUI/TimerPopUp";

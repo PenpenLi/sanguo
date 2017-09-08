@@ -25,6 +25,7 @@ public static class SceneTool {
                 progress.text = (int)(async.progress * 100) + "%";
                 yield return new WaitForEndOfFrame();//<strong>加上这么一句就可以先显示加载画面然后再进行加载</strong>  
             }
+            progress.text =  "100%";
             //读取完毕后返回， 系统会自动进入C场景  
             yield return async;
         } else {

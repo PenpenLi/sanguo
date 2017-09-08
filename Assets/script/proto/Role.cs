@@ -51,6 +51,15 @@ namespace org.alan.chess.proto
       get { return _zoneId; }
       set { _zoneId = value; }
     }
+
+    private long _diamond = default(long);
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"diamond", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(long))]
+    public long diamond
+    {
+      get { return _diamond; }
+      set { _diamond = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }

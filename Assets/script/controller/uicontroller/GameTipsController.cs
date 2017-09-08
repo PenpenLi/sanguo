@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.manager;
+﻿using Assets.script.constant;
+using Assets.Scripts.manager;
 using Assets.Scripts.net;
 using org.alan.chess.proto;
 using System.Collections.Generic;
@@ -6,12 +7,12 @@ using UnityEngine;
 
 public class GameTipsController : MonoBehaviour, IResponseHandler {
 
-    Queue<GameTips> message = new Queue<GameTips>();
+    public Queue<GameTips> message = new Queue<GameTips>();
 
     // Use this for initialization
     void Start() {
         //注册登录消息处理
-        MessageDispatcher.RegisterHandler(MessageTypeEnum.TIPS, this);
+        MessageDispatcher.RegisterHandler(MessageConst.Tips.TYPE, this);
     }
 
     // Update is called once per frame
@@ -23,7 +24,7 @@ public class GameTipsController : MonoBehaviour, IResponseHandler {
     }
 
     private void OnDestroy() {
-        MessageDispatcher.RemoveHandler(MessageTypeEnum.TIPS);
+        MessageDispatcher.RemoveHandler(MessageConst.Tips.TYPE);
     }
 
     public void PopupTips(GameTips gameTips) {
@@ -39,7 +40,7 @@ public class GameTipsController : MonoBehaviour, IResponseHandler {
 
     public void Handle(int cmd, byte[] data) {
         switch (cmd) {
-            case MessageCmdEnum.TIPS_RESP_RESULT:
+            case MessageConst.Tips.TIPS_RESP_RESULT:
                 GameTips gameTips = ProtobufTool.DeSerialize<GameTips>(data);
                 message.Enqueue(gameTips);
                 break;

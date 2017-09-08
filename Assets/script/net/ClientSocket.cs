@@ -56,30 +56,26 @@ namespace Assets.Scripts.net {
             if (count < headlen) {
                 socket.BeginReceive(head, count, headlen - count, SocketFlags.None, new AsyncCallback(ReceiveHead), count);
             } else {
-                try {
-                    //处理一下高低字节位问题
-                    byte[] realBytesLen = new byte[headlen];
-                    for (int i = 0; i < headlen; i++) {
-                        realBytesLen[i] = head[headlen - 1 - i];
-                    }
-                    int length = ByteUtil.byteArray2Int(realBytesLen, 0);
-                    byte[] data = new byte[length];//声明接受数组
-                    count = 0;
-                    while (count < length) {
-                        int tempLength = socket.Receive(data, count, length - count, SocketFlags.None);
-                        count += tempLength;
-                    }
-                    socket.BeginReceive(head, 0, headlen, SocketFlags.None, new AsyncCallback(ReceiveHead), 0);
-                    MarsMessage msg = ProtobufTool.DeSerialize<MarsMessage>(data);
-                    //心跳消息直接在本类处理
-                    if (msg.messageType == 1) {
-                        Pong pong = ProtobufTool.DeSerialize<Pong>(msg.data);
-                        Pong(pong);
-                    } else {
-                        MessageDispatcher.Receive(msg);
-                    }
-                } catch (Exception e) {
-                    Debug.Log(e.ToString());
+                //处理一下高低字节位问题
+                byte[] realBytesLen = new byte[headlen];
+                for (int i = 0; i < headlen; i++) {
+                    realBytesLen[i] = head[headlen - 1 - i];
+                }
+                int length = ByteUtil.byteArray2Int(realBytesLen, 0);
+                byte[] data = new byte[length];//声明接受数组
+                count = 0;
+                while (count < length) {
+                    int tempLength = socket.Receive(data, count, length - count, SocketFlags.None);
+                    count += tempLength;
+                }
+                socket.BeginReceive(head, 0, headlen, SocketFlags.None, new AsyncCallback(ReceiveHead), 0);
+                MarsMessage msg = ProtobufTool.DeSerialize<MarsMessage>(data);
+                //心跳消息直接在本类处理
+                if (msg.messageType == 1) {
+                    Pong pong = ProtobufTool.DeSerialize<Pong>(msg.data);
+                    Pong(pong);
+                } else {
+                    MessageDispatcher.Receive(msg);
                 }
             }
         }

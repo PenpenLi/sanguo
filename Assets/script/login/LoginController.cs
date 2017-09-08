@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.login;
+﻿using Assets.script.constant;
+using Assets.Scripts.login;
 using Assets.Scripts.manager;
 using Assets.Scripts.net;
 using Assets.Scripts.tool;
@@ -13,7 +14,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LoginController : MonoBehaviour, IResponseHandler {
+public class LoginController : MonoBehaviour {
 
 
     public AppConfig appConfig;
@@ -31,13 +32,12 @@ public class LoginController : MonoBehaviour, IResponseHandler {
     string _userName;
     string _password;
 
-    LoginHandler loginHandler;
-
     private void Start() {
         appConfig = ApplicationManager.appConfig;
         userMeta = ApplicationManager.userMeta;
         //登录按钮增加事件
         loginBut.onClick.AddListener(LoginHandle);
+        //loginBut.OnPointerClick()
         //增加注册按钮事件
         registerBut.onClick.AddListener(RegisterHandler);
         //试玩按钮事件,游客登录
@@ -47,19 +47,6 @@ public class LoginController : MonoBehaviour, IResponseHandler {
         userNameInput.text = userMeta.userName;
         passwordInput.text = userMeta.password;
 
-        //注册登录消息处理
-        loginHandler = new LoginHandler();
-        MessageDispatcher.RegisterHandler(MessageTypeEnum.LOGIN, loginHandler);
-    }
-
-
-    private void Update() {
-        loginHandler.Update();
-    }
-
-    private void OnDestroy() {
-        //注册登录消息处理
-        MessageDispatcher.RemoveHandler(MessageTypeEnum.LOGIN);
     }
 
     /// <summary>
@@ -271,17 +258,6 @@ public class LoginController : MonoBehaviour, IResponseHandler {
         //StartCoroutine(Tool.LoadScene("scene/main"));
     }
 
-    private void LoginSuccess(EnterGame enterGame) {
-        PopupManager.ShowTimerPopUp(GameTipsDic.GetTips(GameResultEnum.LOGIN_SUCCESS));
-        isLoad = true;
-        SaveUser();
-        StartCoroutine(Tool.LoadScene("scene/main"));
-    }
-
-    private void CreateRole() {
-
-    }
-
     private void SaveUser() {
         UserMeta userMeta = new UserMeta {
             userName = _userName,
@@ -292,21 +268,8 @@ public class LoginController : MonoBehaviour, IResponseHandler {
 
     private void OnApplicationQuit() {
         Debug.Log("login OnApplicationQuit");
-        NetManager.clientSocket.Close();
-    }
-
-    public void Handle(int cmd, byte[] data) {
-        switch (cmd) {
-            case MessageCmdEnum.LOGIN_RESP_CREATE_ROLE:
-                //CreateRole createRole = ProtobufTool.DeSerialize<CreateRole>(data);
-                CreateRole();
-                break;
-            case MessageCmdEnum.LOGIN_RESP_ENTER_GAME:
-                EnterGame enterGame = ProtobufTool.DeSerialize<EnterGame>(data);
-                LoginSuccess(enterGame);
-                break;
-            default:
-                break;
+        if (NetManager.clientSocket != null) {
+            NetManager.clientSocket.Close();
         }
     }
 }

@@ -2,12 +2,29 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Assets.Scripts.manager;
+using System;
+using Assets.script.constant;
+using Assets.script.manager;
 
 public class MainController : MonoBehaviour {
 
     public Button tiantiBut;
     public Button pipeiBut;
     public Button buzhenBut;
+
+    public Text diamondText;
+    public Canvas popCanvas;
+
+    RoomHandler roomHandler;
+    BattleHandler battleHandler;
+
+    private void Awake() {
+        roomHandler = new RoomHandler();
+        battleHandler = new BattleHandler();
+        MessageDispatcher.RegisterHandler(MessageConst.Room.TYPE, roomHandler);
+        MessageDispatcher.RegisterHandler(MessageConst.Battle.TYPE, battleHandler);
+    }
 
     // Use this for initialization
     void Start() {
@@ -17,7 +34,7 @@ public class MainController : MonoBehaviour {
     }
 
     void OnTianTi() {
-        SceneManager.LoadScene("scene/game");
+        NetManager.QuickMatch(1);
     }
 
     void OnPiPei() {
@@ -26,7 +43,26 @@ public class MainController : MonoBehaviour {
     }
     // Update is called once per frame
     void Update() {
+        diamondText.text = Convert.ToString(PlayerManager.self.player.role.diamond);
+        roomHandler.Update();
+        battleHandler.Update();
+        CheckPlayerStatus();
+    }
+    /// <summary>
+    /// 检查当前用户状态
+    /// </summary>
+    void CheckPlayerStatus() {
+        PlayerManager.self.statusManager.Update();
 
     }
 
+    private void OnDestroy() {
+        MessageDispatcher.RemoveHandler(MessageConst.Room.TYPE);
+        MessageDispatcher.RemoveHandler(MessageConst.Battle.TYPE);
+    }
+
+    private void OnApplicationQuit() {
+        Debug.Log("login OnApplicationQuit");
+        NetManager.clientSocket.Close();
+    }
 }

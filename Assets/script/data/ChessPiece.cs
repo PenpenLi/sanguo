@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 
 [System.Serializable]
-public enum TeamID { HONG, HEI }
+public enum TeamID { HONG = 1, HEI = 2 }
 [System.Serializable]
 public enum ChessPieceType {
-    SHUAI, SHI, XIANG, MA , CHE , PAO , BING 
+    SHUAI, SHI, XIANG, MA, CHE, PAO, BING
 }
 
 [System.Serializable]

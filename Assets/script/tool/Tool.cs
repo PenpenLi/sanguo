@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.manager;
+using org.alan.chess.proto;
 using System;
 using System.Collections;
 using UnityEngine;

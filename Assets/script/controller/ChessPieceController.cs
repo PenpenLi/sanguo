@@ -29,7 +29,7 @@ public abstract class ChessPieceController : MonoBehaviour {
         //根据座位获取到自己的位置
         GameObject go = GameObject.Find(name);
         transform.position = go.transform.position;
-        Debug.Log(name + "," + go.name);
+        //Debug.Log(name + "," + go.name);
         sitController = go.GetComponent<SitController>();
         sitController.chessPieceObj = this.gameObject;
         foreach (Transform tf in GetComponentsInChildren<Transform>()) {
@@ -46,18 +46,18 @@ public abstract class ChessPieceController : MonoBehaviour {
     }
 
     public void Update() {
-        if (sprite != null) {
-            frameNum++;
-            int a = frameNum / 50;
-            int b = frameNum % 50;
-            if (b == 0) {
-                if (a % 2 == 0) {
-                    sprite.Translate(new Vector3(0, 0, 0.1f));
-                } else {
-                    sprite.Translate(new Vector3(0, 0, -0.1f));
-                }
-            }
-        }
+        //if (sprite != null) {
+        //    frameNum++;
+        //    int a = frameNum / 50;
+        //    int b = frameNum % 50;
+        //    if (b == 0) {
+        //        if (a % 2 == 0) {
+        //            sprite.Translate(new Vector3(0, 0, 0.1f));
+        //        } else {
+        //            sprite.Translate(new Vector3(0, 0, -0.1f));
+        //        }
+        //    }
+        //}
     }
     //private void OnMouseDown() {
     //    if (!isPick) {
