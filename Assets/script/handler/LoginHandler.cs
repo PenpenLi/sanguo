@@ -37,7 +37,7 @@ public class LoginHandler : MonoBehaviour, IResponseHandler {
 
     private void CreateRole() {
         //StartCoroutine(SceneTool.LoadScene("scene/create_role"));
-        SceneManager.LoadScene("scene/create_role");
+        StartCoroutine(SceneTool.LoadScene("scene/create_role"));
     }
 
     private void SaveUser() {

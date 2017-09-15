@@ -108,8 +108,8 @@ namespace Assets.script.manager {
             return StatusEnum.BATTLE;
         }
         public override void Start() {
+            Debug.Log("加载游戏场景");
             //开始初始游戏场景
-            SceneManager.LoadScene("scene/game");
         }
         public override void Update() {
 

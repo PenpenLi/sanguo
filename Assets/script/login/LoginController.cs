@@ -33,6 +33,7 @@ public class LoginController : MonoBehaviour {
     string _password;
 
     private void Start() {
+        Debug.Log("start login...");
         appConfig = ApplicationManager.appConfig;
         userMeta = ApplicationManager.userMeta;
         //登录按钮增加事件
@@ -256,14 +257,6 @@ public class LoginController : MonoBehaviour {
         PlayerPrefs.SetString("userName", _userName);
         PlayerPrefs.SetString("password", _password);
         //StartCoroutine(Tool.LoadScene("scene/main"));
-    }
-
-    private void SaveUser() {
-        UserMeta userMeta = new UserMeta {
-            userName = _userName,
-            password = _password
-        };
-        ApplicationManager.SaveUserInfo(userMeta);
     }
 
     private void OnApplicationQuit() {

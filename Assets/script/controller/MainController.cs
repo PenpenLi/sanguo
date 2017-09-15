@@ -16,14 +16,7 @@ public class MainController : MonoBehaviour {
     public Text diamondText;
     public Canvas popCanvas;
 
-    RoomHandler roomHandler;
-    BattleHandler battleHandler;
-
     private void Awake() {
-        roomHandler = new RoomHandler();
-        battleHandler = new BattleHandler();
-        MessageDispatcher.RegisterHandler(MessageConst.Room.TYPE, roomHandler);
-        MessageDispatcher.RegisterHandler(MessageConst.Battle.TYPE, battleHandler);
     }
 
     // Use this for initialization
@@ -44,8 +37,6 @@ public class MainController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         diamondText.text = Convert.ToString(PlayerManager.self.player.role.diamond);
-        roomHandler.Update();
-        battleHandler.Update();
         CheckPlayerStatus();
     }
     /// <summary>
@@ -53,12 +44,9 @@ public class MainController : MonoBehaviour {
     /// </summary>
     void CheckPlayerStatus() {
         PlayerManager.self.statusManager.Update();
-
     }
 
     private void OnDestroy() {
-        MessageDispatcher.RemoveHandler(MessageConst.Room.TYPE);
-        MessageDispatcher.RemoveHandler(MessageConst.Battle.TYPE);
     }
 
     private void OnApplicationQuit() {

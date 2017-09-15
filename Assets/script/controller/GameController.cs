@@ -6,6 +6,7 @@ using org.alan.chess.proto;
 using Assets.Scripts.manager;
 using Assets.script.manager;
 using Assets.script.constant;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour, IResponseHandler {
     //当前选中棋子的控制器
@@ -16,6 +17,12 @@ public class GameController : MonoBehaviour, IResponseHandler {
     public RespCurrentGoInfo goInfo;
     public int selfTeamId;
     public long selfPlayerId;
+
+    //回合显示
+    public Button roundBut;
+    //倒计时显示
+    public Button countdownBut;
+
     private void Awake() {
         BattleStatus battleStatus = PlayerManager.self.statusManager.currentStatus as BattleStatus;
         respGameInit = battleStatus.respGameInit;
@@ -68,14 +75,17 @@ public class GameController : MonoBehaviour, IResponseHandler {
             Destroy(hongqiGameObject);
         }
 
-        if (selfTeamId != (int)TeamID.HONG) {
+        if (selfTeamId == (int)TeamID.HEI) {
             GameObject team1Camera = GameObject.Find("Team1Camera");
             if (team1Camera != null) {
                 team1Camera.SetActive(false);
                 Destroy(team1Camera);
             }
+
+            Camera camera = Resources.Load("prefabs/Team2Camera") as Camera;
+            Instantiate(camera);
         }
-        if (selfTeamId != (int)TeamID.HEI) {
+        if (selfTeamId == (int)TeamID.HONG) {
             GameObject team2Camera = GameObject.Find("Team2Camera");
             if (team2Camera != null) {
                 team2Camera.SetActive(false);
@@ -206,6 +216,10 @@ public class GameController : MonoBehaviour, IResponseHandler {
 
     public void ReceiveGoInfo(RespCurrentGoInfo rcgi) {
         goInfo = rcgi;
+        //如果是新的一个回合，显示回合
+        if (goInfo.newRound) {
+
+        }
     }
 
     private void ClearState() {

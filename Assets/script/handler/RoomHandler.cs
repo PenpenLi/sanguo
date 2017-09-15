@@ -14,6 +14,10 @@ using Assets.script.manager;
 
 public class RoomHandler : MonoBehaviour, IResponseHandler {
 
+    private void Awake() {
+        MessageDispatcher.RegisterHandler(MessageConst.Room.TYPE, this);
+    }
+
     // Queue<UnityAction> actions = new Queue<UnityAction>();
     public void Update() {
         // if (actions.Count > 0) {
@@ -46,6 +50,10 @@ public class RoomHandler : MonoBehaviour, IResponseHandler {
             default:
                 break;
         }
+    }
+
+    private void OnDestroy() {
+        MessageDispatcher.RemoveHandler(MessageConst.Room.TYPE);
     }
 
 }

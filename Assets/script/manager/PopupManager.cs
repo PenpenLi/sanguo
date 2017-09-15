@@ -20,6 +20,12 @@ namespace Assets.Scripts.manager {
             controller.message.text = message;
         }
 
+        public static void ShowGameRoundPopUp(string message) {
+            GameObject gameObject = AddWindow(PopupWindowName.TIME_POP_UP);
+            TimePopPanelController controller = gameObject.GetComponent<TimePopPanelController>();
+            controller.message.text = message;
+        }
+
         /// <summary>
         /// 弹出窗口
         /// </summary>
@@ -80,6 +86,10 @@ namespace Assets.Scripts.manager {
         /// 定时关闭弹出框
         /// </summary>
         static public string TIME_POP_UP = "SceneUI/TimerPopUp";
+        /// <summary>
+        /// 回合
+        /// </summary>
+        static public string ROUND_POP_UP = "SceneUI/RoundPopUp";
         /// <summary>
         /// 需要点击关闭的弹出框
         /// </summary>

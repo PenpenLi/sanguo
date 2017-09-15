@@ -1,7 +1,0 @@
-{
-	"debug":true,
-	"appID":1,
-	"channelID":1,
-	"asdkUrl":"http://192.168.0.105:9527/asdk",
-	"centerUrl":"http://192.168.0.105:8081/center"
-}
